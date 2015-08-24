@@ -53,6 +53,7 @@ module.exports = React.createClass({
                 onMouseMove={this.onMouseMove}
                 onMouseOver={this.onMouseOver}
                 onMouseOut={this.onMouseOut}>
+      <div className="title">Flux Dispatcher</div>
       <div className="score">{this.state.score}</div>
       <div className="ball-container" style={ballStyles}>
         <Ball color={this.state.ballColor}></Ball>
