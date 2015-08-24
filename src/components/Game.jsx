@@ -13,7 +13,9 @@ var GAME_WIDTH = 800,
     BALL_WIDTH = 75,
     BUCKETS_WIDTH = 470,
     BALL_STARTING_POSITION = 20,
-    BALL_SPEED = 200; // pixels per second
+    PIPE_PADDING = 200,
+    BALL_SPEED = 200, // pixels per second
+    PIPE_SPEED = 50; // pixels per second
 
 module.exports = React.createClass({
   mixins: [ReactAnimationLoop],
@@ -27,13 +29,19 @@ module.exports = React.createClass({
         y: BALL_STARTING_POSITION
       },
       ballColor: BALL_COLORS[0],
-      animationLoopRunning: false
+      pipePosition: GAME_WIDTH / 2,
+      pipeDirection: -1,
+      animationLoopRunning: true
     };
   },
 
   render: function() {
     var bucketsStyles = {
       left: this.state.bucketsPosition
+    };
+
+    var pipeStyles = {
+      left: this.state.pipePosition
     };
 
     var ballStyles = {
@@ -49,7 +57,7 @@ module.exports = React.createClass({
       <div className="ball-container" style={ballStyles}>
         <Ball color={this.state.ballColor}></Ball>
       </div>
-      <div className="pipe-container">
+      <div className="pipe-container" style={pipeStyles}>
         <Pipe></Pipe>
       </div>
       <div ref="bucketsContainer"
@@ -65,8 +73,8 @@ module.exports = React.createClass({
         nextPosition = e.clientX - rootCoords.left;
 
     // Make sure the buckets don't go out of bounds
-    nextPosition = Math.max(nextPosition, BUCKETS_WIDTH / 2);
-    nextPosition = Math.min(nextPosition, GAME_WIDTH - BUCKETS_WIDTH / 2);
+    //nextPosition = Math.max(nextPosition, BUCKETS_WIDTH / 2);
+    //nextPosition = Math.min(nextPosition, GAME_WIDTH - BUCKETS_WIDTH / 2);
 
     this.setState({
       bucketsPosition: nextPosition
@@ -86,6 +94,26 @@ module.exports = React.createClass({
   },
 
   onFrame: function(delta) {
+    this._handlePipeMoving(delta);
+    this._handleBallDropping(delta);
+  },
+
+  _handlePipeMoving: function(delta) {
+    var nextState = {
+      pipePosition: this.state.pipePosition +
+                    PIPE_SPEED / 60 * delta * this.state.pipeDirection
+    };
+
+    if (nextState.pipePosition < PIPE_PADDING) {
+      nextState.pipeDirection = 1
+    } else if (nextState.pipePosition > GAME_WIDTH - PIPE_PADDING) {
+      nextState.pipeDirection = -1;
+    }
+
+    this.setState(nextState);
+  },
+
+  _handleBallDropping: function(delta) {
     var hitArea = this.refs.buckets.refs[this.state.ballColor + 'HitArea'],
         rootCoords = this.getDOMNode().getBoundingClientRect(),
         hitAreaCoords = hitArea.getDOMNode().getBoundingClientRect(),
@@ -112,6 +140,7 @@ module.exports = React.createClass({
         nextState.score = this.state.score + 1;
       }
 
+      nextState.ballPosition.x = this.state.pipePosition;
       nextState.ballPosition.y = BALL_STARTING_POSITION;
       nextState.ballColor = _.sample(BALL_COLORS);
     }
