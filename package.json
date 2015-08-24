@@ -1,0 +1,27 @@
+{
+  "name": "flux-dispatcher-game",
+  "version": "0.0.1",
+  "description": "Having fun with Flux",
+  "main": "build/bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skidding/flux-dispatcher-game.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skidding/flux-dispatcher-game/issues"
+  },
+  "homepage": "https://github.com/skidding/flux-dispatcher-game",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "react": "^0.13.3",
+    "react-animation-loop": "^0.1.2"
+  },
+  "devDependencies": {
+    "cosmos-js": "^0.6.8"
+  }
+}
