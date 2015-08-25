@@ -105,9 +105,14 @@ module.exports = React.createClass({
                     PIPE_SPEED / 60 * delta * this.state.pipeDirection
     };
 
-    if (nextState.pipePosition < PIPE_PADDING) {
-      nextState.pipeDirection = 1
-    } else if (nextState.pipePosition > GAME_WIDTH - PIPE_PADDING) {
+    var leftMargin = PIPE_PADDING,
+        rightMargin = GAME_WIDTH - PIPE_PADDING;
+
+    if (nextState.pipePosition < leftMargin) {
+      nextState.pipePosition = leftMargin;
+      nextState.pipeDirection = 1;
+    } else if (nextState.pipePosition > rightMargin) {
+      nextState.pipePosition = rightMargin;
       nextState.pipeDirection = -1;
     }
 
